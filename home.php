@@ -17,6 +17,9 @@
 	$queryOrders = "SELECT start_date, return_date, car_name FROM orders INNER JOIN customers ON orders.fk_email = customers.email INNER JOIN cars ON orders.fk_car_id = cars.car_id WHERE email = '$userEmail' ";
 	$resultOrders = mysqli_query($conn, $queryOrders);
 
+  // Query to select recommended cars
+  $queryCars = "SELECT * FROM cars WHERE fk_office_id = 3";
+  $resultCars = mysqli_query($conn, $queryCars);
 
 ?>
 <!DOCTYPE html>
@@ -36,7 +39,7 @@
 			<p class="h2">Logged In As - <?php echo $userRow['email']; ?></p>
 			<a href="logout.php?logout">Sign Out</a>
 		</div>
-		<div class="col-md-7 col-xs-5 py-5">
+		<div class="col-md-6 col-xs-5 py-5 offset-1">
 			<p>Welcome to your Dashboard!</p>
 
 		</div>
@@ -66,10 +69,27 @@
 			</table>
 
 		</div>
-		
-		<div class="col-md-7 col-xs-12 offset-md-1">
-			
+
+		<div class="col-md-4 col-xs-12 offset-md-2">
+     <p class="h3">Recommended for You: <hr></p>
+    <?php while ($rowCars = mysqli_fetch_assoc($resultCars)) {
+      ?>
+        <div class="row">
+          <div class="col-xs-4 offset-1">
+
+          <img src="<?php echo $rowCars['image_url'] ?>"  style="width: 300px; height: 230px;"></img>
+          <p class="h4"><?php echo $rowCars['car_name'] ?></p>
+          <p><?php echo $rowCars['car_type'] ?></p>
+          
+          </div>
+        </div>
+      <?php 
+        }
+      ?>  
     </div>
+		<!-- <div class="col-md-7 col-xs-12 offset-md-1">
+			
+    </div> -->
 	</div>
 	
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
